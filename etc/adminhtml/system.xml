@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="hmh_review_auto_approval">
+            <group id="word_filter" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Auto Approval by Word Filter</label>
+                <comment>Auto approve reviews when the configured words are not found.</comment>
+                <field id="words" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Blocked Words</label>
+                    <comment><![CDATA[Enter blocked words separated by new lines or commas. Reviews containing any configured word will not pass this rule.]]></comment>
+                    <depends>
+                        <field id="general/enable">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
