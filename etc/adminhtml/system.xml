@@ -6,7 +6,33 @@
             <group id="word_filter" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Auto Approval by Word Filter</label>
                 <comment>Auto approve reviews when the configured words are not found.</comment>
-                <field id="words" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="filter_method" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Filter Method</label>
+                    <source_model>Hmh\ReviewAutoApprovalRuleWordFilter\Model\Config\Source\FilterMethod</source_model>
+                    <comment>Select how matched words should be evaluated.</comment>
+                    <depends>
+                        <field id="general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="word_count" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Word Count</label>
+                    <comment>Minimum number of matched blocked words required to fail this rule.</comment>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="general/enable">1</field>
+                        <field id="filter_method">by_qty</field>
+                    </depends>
+                </field>
+                <field id="word_percentage" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Word Percentage</label>
+                    <comment>Minimum matched blocked-word percentage required to fail this rule.</comment>
+                    <source_model>Hmh\ReviewAutoApprovalRuleWordFilter\Model\Config\Source\WordPercentage</source_model>
+                    <depends>
+                        <field id="general/enable">1</field>
+                        <field id="filter_method">by_percentage</field>
+                    </depends>
+                </field>
+                <field id="words" translate="label comment" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Blocked Words</label>
                     <comment><![CDATA[Enter blocked words separated by new lines or commas. Reviews containing any configured word will not pass this rule.]]></comment>
                     <depends>

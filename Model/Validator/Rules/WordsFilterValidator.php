@@ -6,18 +6,21 @@ namespace Hmh\ReviewAutoApprovalRuleWordFilter\Model\Validator\Rules;
 
 use Hmh\ReviewAutoApproval\Model\Validator\Rules\AbstractValidator;
 use Hmh\ReviewAutoApprovalRuleWordFilter\Model\Config\ConfigProvider;
+use Hmh\ReviewAutoApprovalRuleWordFilter\Model\Validator\Rules\Strategy\StrategyPool;
 use Magento\Review\Model\Review;
 
 class WordsFilterValidator extends AbstractValidator
 {
     public function __construct(
-        private readonly ConfigProvider $configProvider
+        private readonly ConfigProvider $configProvider,
+        private readonly StrategyPool $strategyPool
     ) {
     }
 
     public function isValid(Review $review): bool
     {
-        $blackList = $this->configProvider->getWords($this->getStoreId($review));
+        $storeId = $this->getStoreId($review);
+        $blackList = $this->configProvider->getWords($storeId);
 
         if ($blackList === []) {
             return true;
@@ -33,28 +36,32 @@ class WordsFilterValidator extends AbstractValidator
             return true;
         }
 
-        $matchedWord = $this->getMatchedWord($reviewText, $blackList);
-        if ($matchedWord === null) {
-            return true;
-        }
+        $matchedWordTotal = $this->getMatchedWord($reviewText, $blackList);
 
-        return false;
+        $strategy = $this->strategyPool->get($this->configProvider->getFilterMethod($storeId));
+
+        return $strategy->isValid($matchedWordTotal, $reviewText, $storeId);
     }
 
-    private function getMatchedWord(string $targetText, array $wordList): ?string
+    private function getMatchedWord(string $targetText, array $wordList): int
     {
+        $matchedTotal = 0;
+
         foreach ($wordList as $word) {
             $word = trim((string) $word);
             if ($word === '') {
                 continue;
             }
 
-            if (preg_match('/\b' . preg_quote($word, '/') . '\b/i', $targetText)) {
-                return $word;
+            $pattern = '/\\b' . preg_quote($word, '/') . '\\b/i';
+            $matchCount = preg_match_all($pattern, $targetText);
+            if ($matchCount === false || $matchCount === 0) {
+                continue;
             }
+            $matchedTotal += $matchCount;
         }
 
-        return null;
+        return $matchedTotal;
     }
 
     private function normalizeText(string $text): string

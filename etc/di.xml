@@ -8,4 +8,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Hmh\ReviewAutoApprovalRuleWordFilter\Model\Validator\Rules\Strategy\StrategyPool">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="by_qty" xsi:type="object">Hmh\ReviewAutoApprovalRuleWordFilter\Model\Validator\Rules\Strategy\ByQtyStrategy</item>
+                <item name="by_percentage" xsi:type="object">Hmh\ReviewAutoApprovalRuleWordFilter\Model\Validator\Rules\Strategy\ByPercentageStrategy</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

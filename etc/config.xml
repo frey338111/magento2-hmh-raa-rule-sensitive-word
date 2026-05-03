@@ -4,6 +4,9 @@
     <default>
         <hmh_review_auto_approval>
             <word_filter>
+                <filter_method>by_qty</filter_method>
+                <word_count>1</word_count>
+                <word_percentage>10</word_percentage>
                 <words><![CDATA[scammer,scamming,con artist,complete scam,total scam,absolute scam,do not trust,untrustworthy,bogus product,fake seller,fake store,trash product,pure garbage,total garbage,complete junk,utter rubbish,absolute rubbish,worst ever,never buy again,avoid at all costs]]></words>
             </word_filter>
         </hmh_review_auto_approval>
